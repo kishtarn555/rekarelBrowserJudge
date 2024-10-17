@@ -1,0 +1,28 @@
+{
+  "name": "rekarel-judge",
+  "version": "0.1.0",
+  "description": "A judge that can run in the browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc && npx rollup -c --bundleConfigAsCjs"
+  },
+  "keywords": [
+    "rekarel",
+    "karel",
+    "judge"
+  ],
+  "author": "Hector Ricardez (kishtarn)",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/wicg-file-system-access": "^2023.10.5",
+    "rollup": "^4.24.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@rekarel/core": "^2.1.0"
+  }
+}

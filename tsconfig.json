@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "module": "es6",
+      "esModuleInterop": true,
+      "target": "ES2018",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist/"
+    },
+    "lib": ["ES2018"],
+    "include": [
+      "./src/**/*"
+    ]
+  }
