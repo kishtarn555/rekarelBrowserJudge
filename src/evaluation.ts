@@ -68,8 +68,7 @@ export async function evaluateFiles() {
                     // You can add your custom action here
                     // Example action: console.log file name and content
                 } else if (entry.kind === 'directory') {
-                    // Recursively search within subdirectories
-                    await iterateDirectory(entry);
+                    continue;
                 }
             }
         }
