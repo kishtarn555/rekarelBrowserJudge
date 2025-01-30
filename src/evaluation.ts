@@ -55,16 +55,16 @@ export async function evaluateFiles() {
                     }
                     if (runtime.state.error != null) {
                         const errorType = RuntimeErrorCodes[runtime.state.error] >= 48? "Límite de instrucciones:": "Error de ejecución:"
-                        result.innerHTML+=`<p><b>${entry.name}<b/>: ${errorType} ${JSON.stringify(runtime.state.error)}</p>`
+                        result.innerHTML+=`<p><b>${entry.name}</b>: <span class="text-danger">${errorType} ${JSON.stringify(runtime.state.error)}</span></p>`
                         continue;
                     } 
                     const finalState = world.output();
                     const simple_output = removeWhitespaces(outFileContent);
                     const simple_final = removeWhitespaces(finalState);
                     if (simple_final === simple_output)
-                        result.innerHTML+=`<p><b>${entry.name}<b/>: Success</p>`
+                        result.innerHTML+=`<p><b>${entry.name}</b>: <span class="text-success">Correcto</span></p>`
                     else 
-                        result.innerHTML+=`<p><b>${entry.name}<b/>: Respuesta incorrecta</p>`
+                        result.innerHTML+=`<p><b>${entry.name}</b>: <span class="text-danger">Respuesta incorrecta</span></p>`
                     // You can add your custom action here
                     // Example action: console.log file name and content
                 } else if (entry.kind === 'directory') {
