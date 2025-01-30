@@ -1,4 +1,4 @@
-import { compile, Runtime, World } from "@rekarel/core";
+import { compile, Runtime, RuntimeErrorCodes, World } from "@rekarel/core";
 import { selectedDirectoryHandle } from "./directoty";
 
 function removeWhitespaces(str: string): string {
@@ -50,12 +50,12 @@ export async function evaluateFiles() {
                     const runtime = world.runtime;
                     runtime.load(program);
 
-                    runtime.start();
                     while (runtime.step()) {
                         //Eval code
                     }
                     if (runtime.state.error != null) {
-                        result.innerHTML+=`<p><b>${entry.name}<b/>: Error de ejecución ${runtime.state.error}</p>`
+                        const errorType = RuntimeErrorCodes[runtime.state.error] >= 48? "Límite de instrucciones:": "Error de ejecución:"
+                        result.innerHTML+=`<p><b>${entry.name}<b/>: ${errorType} ${JSON.stringify(runtime.state.error)}</p>`
                         continue;
                     } 
                     const finalState = world.output();
