@@ -1,5 +1,54 @@
 import { compile, Runtime, RuntimeErrorCodes, World } from "@rekarel/core";
 import { selectedDirectoryHandle } from "./directoty";
+const ERRORCODES = {
+    WALL: 'Karel ha chocado con un muro!',
+    WORLDUNDERFLOW: 'Karel intentó tomar zumbadores en una posición donde no había!',
+    BAGUNDERFLOW: 'Karel intentó dejar un zumbador pero su mochila estaba vacía!',
+    INSTRUCTION: 'Karel ha superado el límite de instrucciones!',
+    STACK: 'La pila de karel se ha desbordado!',
+};
+
+function decodeRuntimeError(error: string):string {
+    if (error === "INSTRUCTION") {
+        return `Karel ha superado el límite de instrucciones!`;
+    }
+    if (error === "INSTRUCTION_LEFT") {
+        return `Karel ha superado el límite de gira izquierda (turnleft)!`;
+    }
+    if (error === "INSTRUCTION_FORWARD") {
+        return `Karel ha superado el límite de avanza (move)!`;
+    }
+    if (error === "INSTRUCTION_PICKBUZZER") {
+        return `Karel ha superado el límite de coge-zumbador (pickbeeper)!`;    
+    }
+    if (error === "INSTRUCTION_LEAVEBUZZER") {
+        return `Karel ha superado el límite de deja-zumbador (putbeeper)!`;
+    }
+    if (error === "STACK") {
+        return `La pila de karel se ha desbordado!`
+    }
+    if (error === "CALLMEMORY") {
+        return `Límite de parámetros superados.`;
+    }
+    if (error === "STACKMEMORY") {
+        return `El límite de memoria del stack a sido superado.`
+        +`<br>El costo de una función es igual al mayor entre uno y la cantidad de parámetros que usa.`;
+    }
+    if (error === "INTEGEROVERFLOW") {
+        return `Se superó el límite superior numérico de 999,999,999.`;
+    }
+    if (error === "INTEGERUNDERFLOW") {
+        return `Se superó el límite inferior numérico de -999,999,999.`;
+    }
+    if (error === "WORLDOVERFLOW") {
+        return `Se superó el límite de zumbadores en una casilla, no debe haber más de 999,999,999 zumbadores.`;
+    }
+    if (error in ERRORCODES) {
+        return ERRORCODES[error];
+    } else {
+        return `Karel tubo un error de ejecución desconocido: ${error}`
+    }
+}
 
 function removeWhitespaces(str: string): string {
     return str.replace(/\s+/g, '');  // Regex to remove all whitespace characters
@@ -7,7 +56,7 @@ function removeWhitespaces(str: string): string {
 
 export async function evaluateFiles() {
     if (!selectedDirectoryHandle) {
-        alert('Please select a directory first.');
+        alert('Por favor, seleccione un directorio de casos primero.');
         return;
     }
 
@@ -16,7 +65,7 @@ export async function evaluateFiles() {
     try {
         program = compile(sourceText, false)[0]
     } catch(e) {
-        alert("Compilation error")
+        alert("Error de compilación")
         return;
     }
 
@@ -55,7 +104,7 @@ export async function evaluateFiles() {
                     }
                     if (runtime.state.error != null) {
                         const errorType = RuntimeErrorCodes[runtime.state.error] >= 48? "Límite de instrucciones:": "Error de ejecución:"
-                        result.innerHTML+=`<p><b>${entry.name}</b>: <span class="text-danger">${errorType} ${JSON.stringify(runtime.state.error)}</span></p>`
+                        result.innerHTML+=`<p><b>${entry.name}</b>: <span class="text-danger">${errorType} ${decodeRuntimeError(runtime.state.error)}</span></p>`
                         continue;
                     } 
                     const finalState = world.output();
@@ -76,6 +125,6 @@ export async function evaluateFiles() {
         // Start iterating through the directory
         await iterateDirectory(selectedDirectoryHandle);
     } catch (error) {
-        console.error('Error iterating through files:', error);
+        console.error('Error al abrir los casos:', error);
     }
 }
